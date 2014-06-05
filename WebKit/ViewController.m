@@ -67,26 +67,31 @@
 
 @end
 
-@interface ViewController () <WKNavigationDelegate, WKUIDelegate>
-            
-
+@interface ViewController () <WKNavigationDelegate, WKUIDelegate> {
+	WKWebView *_webView;
+}
 @end
 
 @implementation ViewController
-            
-- (void)viewDidLoad {
-	[super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-	
+
+- (IBAction)reload:(id)sender {
+	[_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
+}
+
+- (void)prepareWKWebView {
+	// Create WKWebViewConfiguration object in order to attach javascript to html content.
 	WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 	configuration.userContentController = [[WKUserContentController alloc] init];
 	
+	// Create javascript to attach html content.
 	WKUserScript *script = [[WKUserScript alloc] initWithSource:@"function hoge() {alert('this is alert message which is defined on Objective-C.');}"
 												  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
 											   forMainFrameOnly:YES];
 	
+	// Add javascript to configuration object
 	[configuration.userContentController addUserScript:script];
 	
+	// Create and add WKWebView to self.view.
 	WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
 	webView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.view addSubview:webView];
@@ -94,17 +99,26 @@
 	webView.navigationDelegate = self;
 	webView.UIDelegate = self;
 	
+	// Autolayout
 	NSDictionary *views = NSDictionaryOfVariableBindings(webView);
-	
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView(>=0)]-0-|"
 																	  options:0
 																	  metrics:nil
 																		views:views]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[webView(>=0)]-0-|"
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView(>=0)]-0-|"
 																	  options:0
 																	  metrics:nil
 																		views:views]];
-	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8192"]]];
+	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
+	
+	_webView = webView;
+}
+            
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	// Do any additional setup after loading the view, typically from a nib.
+	[self prepareWKWebView];
 }
 
 #pragma mark - WKNavigationDelegate
