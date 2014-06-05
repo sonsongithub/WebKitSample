@@ -26,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		144B2981193FD64700A77234 /* helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = helper.h; sourceTree = "<group>"; };
 		14700D74193FB4E80077E189 /* WebKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14700D78193FB4E80077E189 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14700D79193FB4E80077E189 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 				14700D81193FB4E80077E189 /* Main.storyboard */,
 				14700D84193FB4E80077E189 /* Images.xcassets */,
 				14700D77193FB4E80077E189 /* Supporting Files */,
+				144B2981193FD64700A77234 /* helper.h */,
 			);
 			path = WebKit;
 			sourceTree = "<group>";
@@ -404,6 +406,7 @@
 				14700D96193FB4E80077E189 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		14700D97193FB4E80077E189 /* Build configuration list for PBXNativeTarget "WebKitTests" */ = {
 			isa = XCConfigurationList;
@@ -412,6 +415,7 @@
 				14700D99193FB4E80077E189 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
