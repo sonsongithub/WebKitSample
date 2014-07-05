@@ -22,29 +22,58 @@
 
 @end
 
+@implementation WKNavigation(WebKitTest)
+
+- (NSString*)description {
+	return [NSString stringWithFormat:@"WKNavigation:\nRequestURL=>%@\nResponse=>%@", self.request.URL.absoluteString, [self.response httpResponseFieldDescription]];
+}
+
+@end
+
 @implementation WKNavigationResponse(WebKitTest)
 
 - (NSString*)canShowMIMETypeDescription {
 	if (self.canShowMIMEType) {
-		return @"canShowMIMEType";
+		return @"Can show MIME type";
 	}
-	return @"Not canShowMIMEType";
+	return @"Can not show MIME type";
 }
 
 - (NSString*)forMainFrameDescription {
 	if (self.forMainFrame) {
-		return @"forMainFrame";
+		return @"for main frame";
 	}
-	return @"Not forMainFrame";
-}
+	return @"Not for main frame";}
 
 - (NSString*)responseFeildDescription {
 	return [self.response httpResponseFieldDescription];
 }
 
+- (NSString*)description {
+	NSInteger statusCode = -1;
+	if ([self.response isKindOfClass:[NSHTTPURLResponse class]]) {
+		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)self.response;
+		statusCode = [httpResponse statusCode];
+	}
+	return [NSString stringWithFormat:@"WKNavigationResponse:\n mime=>%@\n forMainFrameDescription=>%@\n responseFeildDescription = %@\n header = %@\n status code = %ld",
+			[self canShowMIMETypeDescription],
+			[self forMainFrameDescription],
+			[self responseFeildDescription],
+			[self.response httpResponseFieldDescription],
+			statusCode];
+}
+
 @end
 
 @implementation WKNavigationAction(WebKitTest)
+
+- (NSString*)description {
+	return [NSString stringWithFormat:@"WKNavigationAction:\n request=>%@\n sourceFrame=>%@\n targetFrame = %@\n navigation type = %@",
+			self.request,
+			self.sourceFrame,
+			self.targetFrame,
+			[self navigationTypeDescription]];
+}
 
 - (NSString*)navigationTypeDescription {
 	switch (self.navigationType) {
@@ -125,56 +154,43 @@
 
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
-	
-	DNSLog(@"%@", webView.configuration.userContentController.userScripts);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
 	DNSLogMethod
-	DNSLog(@"%@", navigation.request.URL);
-	DNSLog(@"%@", ((NSHTTPURLResponse*)navigation.response).allHeaderFields);
+	DNSLog(@"%@", navigation);
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 	DNSLogMethod
-	DNSLog(@"request = %@", navigationAction.request);
-	DNSLog(@"sourceFrame = %@", navigationAction.sourceFrame);
-	DNSLog(@"targetFrame = %@", navigationAction.targetFrame);
-	DNSLog(@"navigation type = %@", [navigationAction navigationTypeDescription]);
+	DNSLog(@"%@", navigationAction);
 	decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 	DNSLogMethod
-	DNSLog(@"%@", [navigationResponse canShowMIMETypeDescription]);
-	DNSLog(@"%@", [navigationResponse forMainFrameDescription]);
-	DNSLog(@"%@", [navigationResponse responseFeildDescription]);
+	DNSLog(@"%@", navigationResponse);
 	decisionHandler(WKNavigationResponsePolicyAllow);
 }
 
