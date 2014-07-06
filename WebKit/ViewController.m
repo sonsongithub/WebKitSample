@@ -98,6 +98,7 @@
 
 @interface ViewController () <WKNavigationDelegate, WKUIDelegate> {
 	WKWebView *_webView;
+	IBOutlet UIProgressView *progressView;
 }
 @end
 
@@ -138,7 +139,8 @@
 																	  options:0
 																	  metrics:nil
 																		views:views]];
-	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
+//	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
+	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.apple.com"]]];
 	
 	_webView = webView;
 }
