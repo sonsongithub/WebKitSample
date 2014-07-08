@@ -113,8 +113,12 @@
 	WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 	configuration.userContentController = [[WKUserContentController alloc] init];
 	
+	// NSString *src = @"function hoge() {alert('this is alert message which is defined on Objective-C.');}";
+	NSString *src = @"function hoge() {confirm('Are you OK?');}";
+	//NSString *src = @"function hoge() {prompt('Enter your name : ', 'your name here');}";
+	
 	// Create javascript to attach html content.
-	WKUserScript *script = [[WKUserScript alloc] initWithSource:@"function hoge() {alert('this is alert message which is defined on Objective-C.');}"
+	WKUserScript *script = [[WKUserScript alloc] initWithSource:src
 												  injectionTime:WKUserScriptInjectionTimeAtDocumentStart
 											   forMainFrameOnly:YES];
 	
@@ -139,8 +143,8 @@
 																	  options:0
 																	  metrics:nil
 																		views:views]];
-//	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
-	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.apple.com"]]];
+	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1:8081"]]];
+//	[webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.apple.com"]]];
 	
 	_webView = webView;
 }
@@ -198,23 +202,42 @@
 
 #pragma mark - WKUIDelegate
 
-- (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+- (WKWebView *)webView:(WKWebView *)webView
+	createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
+               forNavigationAction:(WKNavigationAction *)navigationAction
+		            windowFeatures:(WKWindowFeatures *)windowFeatures {
 	DNSLogMethod
 	return webView;
 }
 
-- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler {
+- (void)webView:(WKWebView *)webView
+	runJavaScriptAlertPanelWithMessage:(NSString *)message
+				      initiatedByFrame:(WKFrameInfo *)frame
+                     completionHandler:(void (^)())completionHandler {
 	DNSLogMethod
 	DNSLog(@"alert -> %@", message);
+//	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+//													message:message
+//												   delegate:nil
+//										  cancelButtonTitle:nil
+//										  otherButtonTitles:@"OK", nil];
+//	[alert show];
 	completionHandler();
 }
 
-- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
+- (void)webView:(WKWebView *)webView
+	runJavaScriptConfirmPanelWithMessage:(NSString *)message
+					    initiatedByFrame:(WKFrameInfo *)frame
+                       completionHandler:(void (^)(BOOL result))completionHandler {
 	DNSLogMethod
 	completionHandler(YES);
 }
 
-- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString *result))completionHandler {
+- (void)webView:(WKWebView *)webView
+	runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt
+                              defaultText:(NSString *)defaultText
+                         initiatedByFrame:(WKFrameInfo *)frame
+                        completionHandler:(void (^)(NSString *result))completionHandler {
 	DNSLogMethod
 	completionHandler(@"Something happened.");
 }
